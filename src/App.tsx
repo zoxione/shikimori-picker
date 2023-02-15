@@ -3,10 +3,12 @@ import { BiSearchAlt } from "react-icons/bi";
 import axios from "axios";
 import { IContent } from "./data/models";
 import { zoxioneContent } from "./data/devZoxioneContent";
+import { CgSpinner } from "react-icons/cg";
 
 const ISDEV = false;
 
 function App() {
+  const [isLoading, setIsLoading] = useState(false);
   const [nickname, setNickname] = useState("");
   const [showIsntFindUser, setShowIsntFindUser] = useState(false);
   const [dataList, setDataList] = useState<IContent[]>([]);
@@ -14,6 +16,7 @@ function App() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
+    setIsLoading(true);
     setShowIsntFindUser(false);
     let isFindUser = false;
     let user;
@@ -53,8 +56,9 @@ function App() {
       }
 
       setDataList(userContent.filter((item) => item.status === "planned"));
-      console.log(dataList);
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -82,25 +86,39 @@ function App() {
 
         {showIsntFindUser && <span>Пользователя не найдено</span>}
 
-        {dataList.length > 0 && (
-          <div className="w-fit h-[300px] overflow-y-scroll bg-slate-100 p-4 rounded-2xl">
-            {dataList.map((item, index) => (
-              <div
-                key={index}
-                className="flex flex-row items-center gap-2 hover:text-emerald-600"
-              >
-                <span>{index}.</span>
-                <a
-                  href={`https://shikimori.one/animes/${item.target_id}-${item.target_title}`}
-                  target="_blank"
-                  className=""
+        {isLoading ? (
+          <span className="animate-spin">
+            <CgSpinner size={36} color="teal" />
+          </span>
+        ) : (
+          dataList.length > 0 && (
+            <div className="w-fit h-[300px] overflow-y-scroll bg-slate-100 p-4 rounded-2xl">
+              {dataList.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-row items-center gap-2 hover:text-emerald-600"
                 >
-                  {item.target_title}
-                </a>
-              </div>
-            ))}
-          </div>
+                  <span>{index + 1}.</span>
+                  <a
+                    href={`https://shikimori.one/animes/${item.target_id}-${item.target_title}`}
+                    target="_blank"
+                  >
+                    {item.target_title}
+                  </a>
+                </div>
+              ))}
+            </div>
+          )
         )}
+
+        <div className="grid grid-cols-2 justify-items-center gap-2">
+          <div className="bg-red-500 text-white text-center p-2 max-w-[360px]">
+            {dataList[0].target_title}
+          </div>
+          <div className="bg-blue-500 text-white text-center p-2 max-w-[360px]">
+            {dataList[1].target_title}
+          </div>
+        </div>
       </div>
     </div>
   );
