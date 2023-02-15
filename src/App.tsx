@@ -11,31 +11,44 @@ import axios from "axios";
 function App() {
   const [nickname, setNickname] = useState("");
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    console.log(nickname);
+    let isFindUser = false;
+    let user;
 
-    // TODO
-    // проверка существования пользователя
-
-    axios
-      .get(`https://shikimori.one/${nickname}/list_export/animes.json`, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
+    await axios
+      .get(`https://shikimori.one/api/users/${nickname}`)
       .then(function (response) {
-        // обработка успешного запроса
-        console.log(response);
-      })
-      .catch(function (error) {
-        // обработка ошибки
-        console.log(error);
-      })
-      .finally(function () {
-        // выполняется всегда
+        isFindUser = true;
+        user = response.data;
       });
+
+    console.log(isFindUser, user);
+
+    if (isFindUser) {
+      axios
+        .get(
+          `https://api.allorigins.win/raw?url=https://shikimori.one/${nickname}/list_export/animes.json`,
+          {
+            // headers: {
+            //   "Access-Control-Allow-Origin": "*",
+            //   "Content-Type": "application/json",
+            // },
+          }
+        )
+        .then(function (response) {
+          // обработка успешного запроса
+          console.log(response);
+        })
+        .catch(function (error) {
+          // обработка ошибки
+          console.log(error);
+        })
+        .finally(function () {
+          // выполняется всегда
+        });
+    }
   };
 
   return (
