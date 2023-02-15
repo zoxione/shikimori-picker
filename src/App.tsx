@@ -92,33 +92,35 @@ function App() {
           </span>
         ) : (
           dataList.length > 0 && (
-            <div className="w-fit h-[300px] overflow-y-scroll bg-slate-100 p-4 rounded-2xl">
-              {dataList.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex flex-row items-center gap-2 hover:text-emerald-600"
-                >
-                  <span>{index + 1}.</span>
-                  <a
-                    href={`https://shikimori.one/animes/${item.target_id}-${item.target_title}`}
-                    target="_blank"
+            <>
+              <div className="w-fit h-[300px] overflow-y-scroll bg-slate-100 p-4 rounded-2xl">
+                {dataList.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-row items-center gap-2 hover:text-emerald-600"
                   >
-                    {item.target_title}
-                  </a>
+                    <span>{index + 1}.</span>
+                    <a
+                      href={`https://shikimori.one/animes/${item.target_id}-${item.target_title}`}
+                      target="_blank"
+                    >
+                      {item.target_title}
+                    </a>
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-2 justify-items-center gap-2">
+                <div className="bg-red-500 text-white text-center p-2 max-w-[360px]">
+                  {dataList[0].target_title}
                 </div>
-              ))}
-            </div>
+                <div className="bg-blue-500 text-white text-center p-2 max-w-[360px]">
+                  {dataList[1].target_title}
+                </div>
+              </div>
+            </>
           )
         )}
-
-        <div className="grid grid-cols-2 justify-items-center gap-2">
-          <div className="bg-red-500 text-white text-center p-2 max-w-[360px]">
-            {dataList[0].target_title}
-          </div>
-          <div className="bg-blue-500 text-white text-center p-2 max-w-[360px]">
-            {dataList[1].target_title}
-          </div>
-        </div>
       </div>
     </div>
   );
